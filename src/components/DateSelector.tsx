@@ -17,6 +17,7 @@ export const DateSelector: React.FC<DateSelectorProps> = ({ date, onChange }) =>
       <ArrowBackIos />
     </Button>
     <DatePicker
+    slotProps={{textField: {size:"small"}}}
       localeText={{}}
       format="yyyy/MM/dd"
       value={date}

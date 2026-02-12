@@ -22,12 +22,11 @@ export const CleanupPage: FC = () => {
     <Stack height="0px" flexGrow={1} gap={1} m={1}>
       <Paper variant="outlined">
         <Stack p={2} gap={1}>
-          <Typography align="left">最古のチェックデータ：{olderDate ?? "None"}</Typography>
-          <Divider />
           <DateSelector date={date} onChange={setDate} />
           <Button
             variant="outlined"
             color="warning"
+            disabled={!olderKeys.length}
             onClick={() => {
               olderKeys.forEach((key) => localStorage.removeItem(key));
               setDate(new Date(date));
@@ -35,15 +34,19 @@ export const CleanupPage: FC = () => {
           >
             以前のデータ{olderKeys.length}件を削除する
           </Button>
+          <Divider />
+          <Typography variant="body2" align="left">
+            ※最古のチェックデータ：{olderDate ?? "None"}
+          </Typography>
         </Stack>
       </Paper>
-
       <Paper variant="outlined">
         <Stack p={2} gap={1}>
           <Typography align="left">削除済みグループのチェックデータ</Typography>
           <Button
             variant="outlined"
             color="warning"
+            disabled={!missingGroupKeys.length}
             onClick={() => {
               missingGroupKeys.forEach((key) => localStorage.removeItem(key));
               setDate(new Date(date));
@@ -56,13 +59,3 @@ export const CleanupPage: FC = () => {
     </Stack>
   );
 };
-
-// const cleanup = () => {
-//   const keys = getStorageKeys();
-//   const removeTargetKeys = keys.filter(key => key.startsWith("status#")).reduce((prev,curr) => ({...prev, [curr]:curr}), {} as {[key: string]:string})
-//   keys
-//     .filter((item) => item.startsWith("group#"))
-//     .sort()
-//     .map((item) => JSON.parse(localStorage.getItem(item)!) as TaskGroup)
-//     .forEach((group) => group.tasks.forEach((task) => TODO));
-// };
