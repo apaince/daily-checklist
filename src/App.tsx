@@ -1,9 +1,8 @@
 import { AutoDelete, EditCalendar, EventAvailable } from "@mui/icons-material";
-import { BottomNavigation, BottomNavigationAction, Box, Divider } from "@mui/material";
+import { BottomNavigation, BottomNavigationAction, Box, Divider, Paper } from "@mui/material";
 import { LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import { useState } from "react";
-import "./App.css";
 
 import { CheckPage, SettingPage, CleanupPage } from "./pages";
 
@@ -12,6 +11,7 @@ function App() {
   return (
     <LocalizationProvider dateAdapter={AdapterDateFns}>
       <Box
+        component={Paper}
         position="absolute"
         top="0px"
         left="0px"

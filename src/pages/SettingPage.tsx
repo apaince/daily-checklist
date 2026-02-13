@@ -128,6 +128,7 @@ const GroupCard: FC<{ group: TaskGroup; setGroups: (value: React.SetStateAction<
                   Taskグループ開始時刻
                 </Typography>
                 <NumberField
+                  disabled={!group.name}
                   value={group.startHour}
                   size="small"
                   min={0}
