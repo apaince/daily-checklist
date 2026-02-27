@@ -12,7 +12,7 @@ const theme = createTheme({
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
-     <CssBaseline />
+    <CssBaseline />
     <ThemeProvider theme={theme}><App /></ThemeProvider>
   </StrictMode>,
 )

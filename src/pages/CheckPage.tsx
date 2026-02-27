@@ -1,8 +1,18 @@
-import { CheckCircle, DoneAll, ExpandLess, ExpandMore, RadioButtonUnchecked, RemoveDone } from "@mui/icons-material";
+import {
+  CheckCircle,
+  DoneAll,
+  ExpandLess,
+  ExpandMore,
+  RadioButtonUnchecked,
+  RemoveDone,
+  RestartAlt,
+} from "@mui/icons-material";
 import {
   Box,
   Collapse,
   Divider,
+  IconButton,
+  LinearProgress,
   List,
   ListItem,
   ListItemButton,
@@ -58,7 +68,7 @@ const CheckPageInner: FC<{
           new Set([
             ...group.tasks.map((taskName) => `status#${dateString}#${group.name}#${taskName}`),
             ...(getStorageKeys().filter((item) => item.startsWith(`status#${dateString}#${group.name}#`)) ?? []),
-          ]),
+          ])
         ).map((taskKey) => {
           const storageData = localStorage.getItem(taskKey);
           if (storageData) return JSON.parse(storageData) as TaskStatus;
@@ -66,30 +76,31 @@ const CheckPageInner: FC<{
           return { date, groupName, name: taskName, check: false };
         }),
       }),
-      {},
-    ),
+      {}
+    )
   );
+  const taskCount = Object.values(datas).reduce((prev, curr) => prev + curr.length, 0);
+  const taskCheckCount = Object.values(datas).reduce(
+    (prev, curr) => prev + curr.filter((item) => item.check).length,
+    0
+  );
+  const taskComplete = Math.round((taskCheckCount / taskCount) * 100);
 
   return (
     <Stack height="0px" flexGrow={1} mx={1}>
-      <Box display="flex" gap={2} justifyContent="end">
-        <Typography align="right" fontSize={10}>
-          達成率：
-          {groupDatas.length
-            ? Math.round(
-                (Object.values(datas).reduce((prev, curr) => prev + Number(curr.every((item) => item.check)), 0) /
-                  groupDatas.length) *
-                  100,
-              )
-            : "-"}
-          %
-        </Typography>
-        <Typography align="right" fontSize={10}>
-          表示時刻：{format(date, "HH:mm")}
-        </Typography>
+      <Typography align="right" fontSize={10}>
+        表示時刻：{format(date, "HH:mm")}
+      </Typography>
+      <Box display="flex">
+        <DateSelector date={date} onChange={setDate} />
+        <IconButton size="small" color="primary" onClick={() => setDate(new Date())}>
+          <RestartAlt />
+        </IconButton>
       </Box>
-      <DateSelector date={date} onChange={setDate} />
-      <Divider sx={{ mt: 1 }} />
+      <Typography position="relative" align="center" fontSize={10}>
+        達成率：{taskComplete || "-"}%（&nbsp;{taskCheckCount}&nbsp;/&nbsp;{taskCount}&nbsp;）
+      </Typography>
+      <LinearProgress color={taskComplete === 100 ? "success" : "primary"} variant="determinate" value={taskComplete} />
       <List disablePadding sx={{ flexGrow: 1, overflow: "auto" }}>
         {groupDatas.map((groupData) => (
           <CheckGroupItem
@@ -138,7 +149,7 @@ const CheckGroupItem: FC<{
               alignItems="center"
               justifyContent="center"
               position="absolute"
-              width={16}
+              width={20}
             >
               {isAllCheck ? (
                 <DoneAll fontSize="small" color="success" />
@@ -150,7 +161,7 @@ const CheckGroupItem: FC<{
                 {datas.length}
               </Typography>
             </Box>
-            <Typography sx={{ pl: 4 }} color={disabled ? "textDisabled" : "textPrimary"} whiteSpace="nowrap">
+            <Typography sx={{ pl: 5 }} color={disabled ? "textDisabled" : "textPrimary"} whiteSpace="nowrap">
               {group.name}
             </Typography>
           </Box>

@@ -1,8 +1,5 @@
 import { ArrowBackIos, ArrowForwardIos } from "@mui/icons-material";
-import {
-  Box,
-  Button
-} from "@mui/material";
+import { Box, Button } from "@mui/material";
 import { DatePicker } from "@mui/x-date-pickers";
 import { addDays, isValid, subDays } from "date-fns";
 
@@ -12,13 +9,12 @@ interface DateSelectorProps {
 }
 
 export const DateSelector: React.FC<DateSelectorProps> = ({ date, onChange }) => (
-  <Box display="flex" justifyContent="space-around">
+  <Box display="flex" minWidth="0px" justifyContent="space-around">
     <Button sx={{ flexGrow: 1 }} onClick={() => onChange(subDays(date, 1))}>
       <ArrowBackIos />
     </Button>
     <DatePicker
-    slotProps={{textField: {size:"small"}}}
-      localeText={{}}
+      slotProps={{ textField: { size: "small" } }}
       format="yyyy/MM/dd"
       value={date}
       onChange={(newValue) => newValue && isValid(newValue) && onChange(newValue)}

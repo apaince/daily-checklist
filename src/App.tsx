@@ -7,14 +7,13 @@ import { useState } from "react";
 import { CheckPage, SettingPage, CleanupPage } from "./pages";
 
 function App() {
-  const [bottomStatus, setBottomStatus] = useState(0);
+  const [bottomStatus, setBottomStatus] = useState(localStorage.length ? 0 : 1);
   return (
     <LocalizationProvider dateAdapter={AdapterDateFns}>
       <Box
         component={Paper}
-        position="absolute"
-        top="0px"
-        left="0px"
+        elevation={0}
+        square
         height="100dvh"
         width="100dvw"
         display="flex"
