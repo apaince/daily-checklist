@@ -44,6 +44,7 @@ export const CheckPage: FC = () => {
           startOfDay(date).getTime() + group.startHour,
       };
     })
+    .sort((a, b) => a.group.name.localeCompare(b.group.name))
     .sort((a, b) => a.group.startHour - b.group.startHour);
 
   return (
@@ -102,18 +103,24 @@ const CheckPageInner: FC<{
       </Typography>
       <LinearProgress color={taskComplete === 100 ? "success" : "primary"} variant="determinate" value={taskComplete} />
       <List disablePadding sx={{ flexGrow: 1, overflow: "auto" }}>
-        {groupDatas.map((groupData) => (
-          <CheckGroupItem
-            key={`${dateString}#${groupData.group.name}`}
-            date={dateString}
-            group={groupData.group}
-            datas={datas[groupData.group.name]}
-            setDatas={(newDatas: TaskStatus[]) =>
-              setDatas((oldDatas) => ({ ...oldDatas, [groupData.group.name]: newDatas }))
-            }
-            disabled={groupData.disabled}
-          />
-        ))}
+        {groupDatas
+          .toSorted(
+            (a, b) =>
+              Number(datas[a.group.name].every((item) => item.check)) -
+              Number(datas[b.group.name].every((item) => item.check))
+          )
+          .map((groupData, i) => (
+            <CheckGroupItem
+              key={`${dateString}#${groupData.group.name}#${i}`}
+              date={dateString}
+              group={groupData.group}
+              datas={datas[groupData.group.name]}
+              setDatas={(newDatas: TaskStatus[]) =>
+                setDatas((oldDatas) => ({ ...oldDatas, [groupData.group.name]: newDatas }))
+              }
+              disabled={groupData.disabled}
+            />
+          ))}
         {groupDatas.length === 0 && (
           <ListItem>
             <ListItemText
@@ -189,6 +196,7 @@ const CheckGroupItem: FC<{
                 const newDatas = [...datas];
                 newDatas[i] = newData;
                 setDatas(newDatas);
+                setOpen(!newDatas.every((item) => item.check));
               }}
             >
               <ListItemIcon>

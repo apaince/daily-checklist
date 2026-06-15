@@ -9,7 +9,7 @@ interface DateSelectorProps {
 }
 
 export const DateSelector: React.FC<DateSelectorProps> = ({ date, onChange }) => (
-  <Box display="flex" minWidth="0px" justifyContent="space-around">
+  <Box display="flex" minWidth="0px" justifyContent="space-around" flexGrow={1}>
     <Button sx={{ flexGrow: 1 }} onClick={() => onChange(subDays(date, 1))}>
       <ArrowBackIos />
     </Button>
